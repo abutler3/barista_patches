@@ -1,0 +1,5 @@
+name: Barista Patches
+type: module
+description: Core and module patches for Barista.
+package: Barista
+core: 8.x
