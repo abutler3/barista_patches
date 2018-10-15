@@ -247,7 +247,11 @@ class MenuLinkTree implements MenuLinkTreeInterface {
       // name or route parameters.
       $tree_link_cacheability = $tree_link_cacheability
         ->merge(CacheableMetadata::createFromObject($data->link));
-
+      \Drupal::logger('barista_patches')->debug('@type: deleted %title.',
+        array(
+            '@type' => "MenuLinkTree: Can Not render inaccessible links",
+            '%title' => $data,
+        ));
       // Only render accessible links.
       // if ($data->access instanceof AccessResultInterface && !$data->access
       //   ->isAllowed()) {

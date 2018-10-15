@@ -106,8 +106,26 @@ class DefaultMenuLinkTreeManipulators {
         // is accidentally rendered, no sensitive information is divulged.
         $tree[$key]->link = new InaccessibleMenuLink($tree[$key]->link);
 
+         // Always keep top-level inaccessible links: their cacheability metadata
+         // that indicates why they're not accessible by the current user must be
+         // bubbled. Otherwise, those subtrees will not be varied by any cache
+         // contexts at all, therefore forcing them to remain empty for all users
+         // unless some other part of the menu link tree accidentally varies by
+         // the same cache contexts.
+         // For deeper levels, we *can* remove the subtrees and therefore also
+         // not perform access checking on the subtree, thanks to bubbling/cache
+         // redirects. This therefore allows us to still do significantly less
+         // work in case of inaccessible subtrees, which is the entire reason why
+         // this deletes subtrees in the first place.
+        
+        // $tree[$key]->subtree = [];
         
        if ($tree[$key]->subtree) {
+          \Drupal::logger('barista_patches')->debug('@type: deleted %title.',
+            array(
+                '@type' => "DefaultMenuLinkTreeManipulators",
+                '%title' => $this->checkAccess($tree[$key]->subtree),
+            ));
           $tree[$key]->subtree = $this->checkAccess($tree[$key]->subtree);
        }
       }

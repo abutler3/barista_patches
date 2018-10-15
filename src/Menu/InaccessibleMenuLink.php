@@ -34,6 +34,11 @@ class InaccessibleMenuLink extends MenuLinkBase {
    * {@inheritdoc}
    */
   public function getTitle() {
+    \Drupal::logger('barista_patches')->debug('@type: deleted %title.',
+      array(
+          '@type' => "InaccessibleMenuLink: getTitle",
+          '%title' => $this->pluginDefinition['title'],
+      ));
     return $this->pluginDefinition['title'];
   }
 
@@ -46,7 +51,11 @@ class InaccessibleMenuLink extends MenuLinkBase {
     // Add special classes.
     $options['attributes']['class'][] = 'fa';
     $options['attributes']['class'][] = 'fa-lock';
-
+    \Drupal::logger('barista_patches')->debug('@type: deleted %title.',
+      array(
+          '@type' => "InaccessibleMenuLink: getUrlObject",
+          '%title' => $options,
+      ));
     if ($title_attribute && $description = $this->getDescription()) {
       $options['attributes']['title'] = $description;
     }
